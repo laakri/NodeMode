@@ -1,19 +1,19 @@
 version: '3.8'
 
 services:
-  w8s:
+  nodemode:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: w8s-app
+    container_name: nodemode-app
     ports:
       - "3000:80"
     restart: unless-stopped
     environment:
       - NODE_ENV=production
     networks:
-      - w8s-network
+      - nodemode-network
 
 networks:
-  w8s-network:
+  nodemode-network:
     driver: bridge

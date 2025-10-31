@@ -29,16 +29,16 @@ jobs:
       - name: Deploy to production
         run: |
           # Ensure the target directory exists
-          sudo mkdir -p /home/laakri/apps/github-runners/w8s/dist/
+          sudo mkdir -p /home/laakri/apps/nodemode/github-runners/nodemode/dist/
           
           # Remove old files
-          sudo rm -rf /home/laakri/apps/github-runners/w8s/dist/*
+          sudo rm -rf /home/laakri/apps/nodemode/github-runners/nodemode/dist/*
           
           # Copy the built files to the correct location
-          sudo cp -r dist/* /home/laakri/apps/github-runners/w8s/dist/
+          sudo cp -r dist/* /home/laakri/apps/nodemode/github-runners/nodemode/dist/
           
           # Set correct permissions
-          sudo chown -R caddy:caddy /home/laakri/apps/github-runners/w8s/dist/
+          sudo chown -R caddy:caddy /home/laakri/apps/nodemode/github-runners/nodemode/dist/
           
           # Restart Caddy to pick up the new files
           sudo systemctl restart caddy

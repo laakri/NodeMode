@@ -1,0 +1,48 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build-and-deploy:
+    runs-on: self-hosted
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+     
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+         
+      - name: Install dependencies
+        run: npm ci
+       
+      - name: Build
+        run: npm run build
+        
+      - name: Deploy to production
+        run: |
+          # Ensure the target directory exists
+          sudo mkdir -p /home/laakri/apps/github-runners/w8s/dist/
+          
+          # Remove old files
+          sudo rm -rf /home/laakri/apps/github-runners/w8s/dist/*
+          
+          # Copy the built files to the correct location
+          sudo cp -r dist/* /home/laakri/apps/github-runners/w8s/dist/
+          
+          # Set correct permissions
+          sudo chown -R caddy:caddy /home/laakri/apps/github-runners/w8s/dist/
+          
+          # Restart Caddy to pick up the new files
+          sudo systemctl restart caddy
+          
+      - name: Notify deployment success
+        if: success()
+        run: echo "✅ W8S Canvas deployment completed successfully!"
